@@ -1,4 +1,5 @@
 from helper import norm_pdf
+import numpy as np
 
 # Initialize prior probabilities
 # taking into account that the vehicle is initially parked
@@ -38,9 +39,27 @@ def estimate_pseudo_range(landmarks, p):
     return pseudo_ranges
 
 # Motion model (assuming 1-D Gaussian dist)
-def motion_model(position, mov, priors, map_size, stdev):
+def motion_model(position, mov, priors, map_size, stdev): # 내 움직임에 의해 belief가 약해짐
     # Initialize the position's probability to zero.
+
+    # position에 있을 확률을 구해라
+    # 내속도는 mov다
+    # 분산은 stdev다
+
+
+    
     position_prob = 0.0
+    for i in range(len(priors)): #  position - i만큼 움직였을 확률을 구하자.
+        x = position - i
+        position_prob += priors[i] * (1 / np.sqrt(2 * np.pi)) * np.exp(- ((x - 1) ** 2) / 2 * (stdev ** 2) )
+
+
+
+    # 평균이 mov 분산이 stdev인 위치에 정규분포표를 그려라
+    # 내가 움직인 거리는 평균이 mov, 분산이 stdev만큼이다.
+    # print("priors", priors)  [0,0,0,0,0,0,...]
+
+
 
     # TODO: Loop over state space for all possible prior positions,
     # calculate the probability (using norm_pdf) of the vehicle
@@ -50,9 +69,28 @@ def motion_model(position, mov, priors, map_size, stdev):
     return position_prob
 
 # Observation model (assuming independent Gaussian)
-def observation_model(landmarks, observations, pseudo_ranges, stdev):
+def observation_model(landmarks, observations, pseudo_ranges, stdev): # 내 관측임에 의해 belief가 강해짐
     # Initialize the measurement's probability to one.
+    # 평균은 pseudo, 표준편차는 stdev
+
     distance_prob = 1.0
+    print("observations: ", observations)
+    print("pseudo_ranges: ", pseudo_ranges)
+    print("=" * 100)
+
+
+    if len(observations) == 0:
+        return 0
+    elif len(observations)>len(pseudo_ranges):
+        return 0
+    else:
+        for i in range(len(observations)): # 평균이 pseudo_ranges이고 분산이 stdev일때 observation[j]일 확률
+            x = pseudo_ranges[i] - observations[i]
+            distance_prob *=  (1 / np.sqrt(2 * np.pi)) * np.exp(- ((x) ** 2) / 2 * (stdev ** 2) )
+
+
+
+    # print("landmarks: ", landmarks)
 
     # TODO: Calculate the observation model probability as follows:
     # (1) If we have no observations, we do not have any probability.
@@ -64,6 +102,7 @@ def observation_model(landmarks, observations, pseudo_ranges, stdev):
     #     d: observation distance
     #     mu: expected mean distance, given by pseudo_ranges
     #     sig: squared standard deviation of measurement
+    print("distance_prob: ", distance_prob)
     return distance_prob
 
 # Normalize a probability distribution so that the sum equals 1.0.

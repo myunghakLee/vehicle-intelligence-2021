@@ -1,23 +1,15 @@
-# Week 2 - Markov Localization
+# Week 2 - Markov Localization - M2021080 이명학
 
----
 
-[//]: # (Image References)
-[plot]: ./markov.gif
 
 ## Assignment
 
-You will complete the implementation of a simple Markov localizer by writing the following two functions in `markov_localizer.py`:
+본 과제에서 모델링 해야하는 것은 2개이다.
 
-* `motion_model()`: For each possible prior positions, calculate the probability that the vehicle will move to the position specified by `position` given as input.
-* `observation_model()`: Given the `observations`, calculate the probability of this measurement being observed using `pseudo_ranges`.
+1. motion의 불확실성 modeling
+   * 우리는 평균적으로 1 씩 움직인다. 단 noise가 포함된다. 즉 정확히 말하면 평균이 1이고 분산이  stdev인 정규분포만큼씩 움직인다. 따라서 내가 1만큼 움직였을지, 2만큼 움직였을지를 각각 구해주면 된다. (예전 위치에 있을 확률 * 예전위치에서 n만큼 움직일 확률)
+2. observation의 불확실성 modeling
+   * 우리는 나무를 관측할 수 있으나 이 역시 불확실하다(단 나무가 있는데 관측하지 못하는 경우는 없다고 가정한다).
+     * 우선 너무 멀리 있는 나무는 관측하지 못하고, 가까이 있는 나무더라도 관측의 불확실성이 있다. 그러므로 
 
-The algorithm is presented and explained in class.
-
-All the other source files (`main.py` and `helper.py`) should be left as they are.
-
-If you correctly implement the above functions, you expect to see a plot similar to the following:
-
-![Expected Result of Markov Localization][plot]
-
-If you run the program (`main.py`) without any modification to the code, it will generate only the frame of the above plot because all probabilities returned by `motion_model()` are zero by default.
+우리가 n번에 위치하고 가정했을 때 나무하고의차를 u, 우리가 관측한 나무하고의 거리를 x로 놓고 가우시안 모델을 적용시켜 확률을 구한다.
