@@ -78,16 +78,6 @@ class ParticleFilter:
         calc_dist = lambda A,B: ((A[0] - B[0]) ** 2 + (A[1] - B[1]) **2) ** 0.5
         norm_pdf = lambda x, m, s: (1 / ((2 * np.pi)**0.5) / s) * np.exp(-(((x - m) / s) ** 2) /2)
 
-
-        # print("self.particles: ",self.particles)
-        # print("sensor_range: ",sensor_range)
-        # print("std_landmark_x: ",std_landmark_x)
-        # print("std_landmark_y: ",std_landmark_y)
-        # print("observations: ",observations)
-        # print("map_landmarks: ",map_landmarks)
-        # exit(True)
-
-
         for p in self.particles:
             landmarks = []
             absolute_cord_obs = []
@@ -121,39 +111,11 @@ class ParticleFilter:
                 p["w"] += 0.000000000000000001
 
                 p['assoc'].append(assoc['id'])    
-            # TODO: For each particle, do the following:
-            # 1. Select the set of landmarks that are visible
-            #    (within the sensor range).
-
-            # 2. Transform each observed landmark's coordinates from the
-            #    particle's coordinate system to the map's coordinates.
-
-            # 3. Associate each transformed observation to one of the
-            #    predicted (selected in Step 1) landmark positions.
-            #    Use self.associate() for this purpose - it receives
-            #    the predicted landmarks and observations; and returns
-            #    the list of landmarks by implementing the nearest-neighbour
-            #    association algorithm.
-            # 4. Calculate probability of this set of observations based on
-            #    a multi-variate Gaussian distribution (two variables being
-            #    the x and y positions with means from associated positions
-            #    and variances from std_landmark_x and std_landmark_y).
-            #    The resulting probability is the product of probabilities
-            #    for all the observations.
-            # 5. Update the particle's weight by the calculated probability.
 
 
     # Resample particles with replacement with probability proportional to
     #   their weights.
     def resample(self):
-        # TODO: Select (possibly with duplicates) the set of particles
-        #       that captures the posteior belief distribution, by
-        # 1. Drawing particle samples according to their weights.
-        # 2. Make a copy of the particle; otherwise the duplicate particles
-        #    will not behave independently from each other - they are
-        #    references to mutable objects in Python.
-        # Finally, self.particles shall contain the newly drawn set of
-        #   particles.
         resample_p = []
         sum_particles = sum([i['w'] for i in self.particles])
 
