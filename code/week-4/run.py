@@ -1,5 +1,9 @@
 from particle_filter import ParticleFilter
 from plot import plot_2D
+import os
+print("="*100)
+print(os.listdir("./"))
+print("="*100)
 
 # Time elapsed between measurements (sec)
 delta_t = 0.1
