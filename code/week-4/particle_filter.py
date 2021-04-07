@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from helpers import distance
 
@@ -117,7 +118,7 @@ class ParticleFilter:
                 p['w'] *= norm_pdf(calc_dist((assoc['x'], assoc['y']), (p['x'], p['y'])),
                                         (observations[i]['x']**2 + observations[i]['y'] **2) ** 0.5,
                                         (std_landmark_x**2 + std_landmark_y**2)**0.5)
-                p["w"] += 1e-100
+                p["w"] += 0.000000000000000001
 
                 p['assoc'].append(assoc['id'])    
             # TODO: For each particle, do the following:
@@ -145,8 +146,6 @@ class ParticleFilter:
     # Resample particles with replacement with probability proportional to
     #   their weights.
     def resample(self):
-        import copy
-        import random
         # TODO: Select (possibly with duplicates) the set of particles
         #       that captures the posteior belief distribution, by
         # 1. Drawing particle samples according to their weights.
