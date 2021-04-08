@@ -74,9 +74,9 @@ class ParticleFilter:
     # Update the weights of each particle using a multi-variate
     #   Gaussian distribution.
     def update_weights(self, sensor_range, std_landmark_x, std_landmark_y,
-                       observations, map_landmarks):
+                       observations, map_landmarks): # self.particle의 w값을 바꾸자!!!
         calc_dist = lambda A,B: ((A[0] - B[0]) ** 2 + (A[1] - B[1]) **2) ** 0.5
-        norm_pdf = lambda x, m, s: (1 / ((2 * np.pi)**0.5) / s) * np.exp(-(((x - m) / s) ** 2) /2)
+        norm_pdf = lambda x, m, s: (1 / ((2 * np.pi)**0.5) / s) * np.exp(-(((x - m) / s) ** 2) /2) # exp에 절대값이 너무 큰 음수를 제곱하면 0이 되버림
 
         for p in self.particles:
             landmarks = []
@@ -86,8 +86,9 @@ class ParticleFilter:
                 x,y = map_landmarks[k]["x"], map_landmarks[k]["y"] 
                 if calc_dist([x,y], [p["x"], p["y"]]) < sensor_range:
                     landmarks.append({"id": k, "x" : x, "y" : y})
-            if len(landmarks) == 0:
-                continue
+            # if len(landmarks) == 0:
+            #     print(len(self.particles))
+            #     continue
 
             transfoer_matrix = [[np.cos(p['t']), -np.sin(p['t'])],
                                 [np.sin(p['t']),  np.cos(p['t'])]]
@@ -101,14 +102,15 @@ class ParticleFilter:
 
             all_associates = self.associate(landmarks, absolute_cord_obs)
 
-            p['w'] = 1
+            p['w'] = 1.0
             p['assoc'] = []
             
             for i, assoc in enumerate(all_associates):
                 p['w'] *= norm_pdf(calc_dist((assoc['x'], assoc['y']), (p['x'], p['y'])),
                                         (observations[i]['x']**2 + observations[i]['y'] **2) ** 0.5,
                                         (std_landmark_x**2 + std_landmark_y**2)**0.5)
-                p["w"] += 0.000000000000000001
+                p['w'] += 0.0 if p['w'] != 0 else 0.00000000000000000001
+
 
                 p['assoc'].append(assoc['id'])    
 
@@ -116,26 +118,27 @@ class ParticleFilter:
     # Resample particles with replacement with probability proportional to
     #   their weights.
     def resample(self):
-        resample_p = []
-        sum_particles = sum([i['w'] for i in self.particles])
+        # resample_p = []
+        # sum_particles = sum([i['w'] for i in self.particles])
 
 
-        for _ in range(self.num_particles):
-            random_num = np.random.uniform(0, sum_particles)
-            rand_key = 0
-            for p in self.particles:
-                rand_key += p['w']
-                if random_num < rand_key:
-                    resample_p.append(copy.deepcopy(p))
-                    break
+        particles_prob = np.array([i['w'] for i in self.particles])
+        particles_prob /= np.sum(particles_prob)
+        random_idx = np.random.choice(self.num_particles, self.num_particles, p=particles_prob)
+        self.particles = [copy.deepcopy(self.particles[i]) for i in random_idx ]
 
-        self.particles = resample_p
+        # self.particles = resample_p
     # Choose the particle with the highest weight (probability)
     def get_best_particle(self):
-        highest_weight = -1.0
-        for p in self.particles:
-            if p['w'] > highest_weight:
-                highest_weight = p['w']
-                best_particle = p
+        highest_weight = -1.000000000000000000000000000
+        try:
+            # print(len(self.particles))
+            for p in self.particles:
+                if p['w'] > highest_weight:
+                    highest_weight = p['w']
+                    best_particle = p
 
-        return best_particle
+            return best_particle
+        except:
+            print(self.particles)
+            exit(True)
