@@ -29,17 +29,16 @@ class KalmanFilter:
                              np.arctan(py/px) + (0 if (px>=0) else (np.pi * ((py>=0)*2-1))),
                              (px*vx + py*vy)/np.sqrt(px**2 +py**2)
                             ])
+        
+        px, py, vx, vy = self.x
+
+        y = z - H(px, py, vx, vy)
+        y[1] = y[1] % -np.pi if y[1] < 0 else y[1] % np.pi        
+
 
         H_j = Jacobian(self.x)
         S = H_j.dot(self.P).dot(H_j.T) + self.R
         K = self.P.dot(H_j.T).dot(np.linalg.inv(S))
-
-
-        px, py, vx, vy = self.x
-
-
-        y = z - H(px, py, vx, vy)
-        y[1] = y[1] % -np.pi if y[1] < 0 else y[1] % np.pi        
 
 
         self.x += np.dot(K, y)
