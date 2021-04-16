@@ -14,6 +14,7 @@ pos_std = [0.3, 0.3, 0.01]
 # Landmark measurement uncertainty [x (m), y (m)]
 landmark_std = [0.3, 0.3]
 
+
 # Read in the map data comprising
 #   (landmark x, landmark y, id).
 def read_map_from_file(filename):

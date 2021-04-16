@@ -86,9 +86,6 @@ class ParticleFilter:
                 x,y = map_landmarks[k]["x"], map_landmarks[k]["y"] 
                 if calc_dist([x,y], [p["x"], p["y"]]) < sensor_range:
                     landmarks.append({"id": k, "x" : x, "y" : y})
-            # if len(landmarks) == 0:
-            #     print(len(self.particles))
-            #     continue
 
             transfoer_matrix = [[np.cos(p['t']), -np.sin(p['t'])],
                                 [np.sin(p['t']),  np.cos(p['t'])]]
@@ -96,8 +93,6 @@ class ParticleFilter:
                 x= p['x'] + np.dot([o['x'],o['y']], transfoer_matrix[0])
                 y= p['y'] + np.dot([o['x'],o['y']], transfoer_matrix[1])
                 absolute_cord_obs.append({'x': x, 'y': y})
-
-
 
 
             all_associates = self.associate(landmarks, absolute_cord_obs)

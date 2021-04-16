@@ -1,30 +1,17 @@
-# Week 4 - Motion Model & Particle Filters
+# Week4 - Particle Filter
 
----
+본 과제는 particle filter의 update부분과 resampling 부분을 구현하는 것이다.
 
-[//]: # (Image References)
-[empty-update]: ./empty-update.gif
-[example]: ./example.gif
 
-## Assignment
 
-You will complete the implementation of a simple particle filter by writing the following two methods of `class ParticleFilter` defined in `particle_filter.py`:
+우선 update부분을 살표보도록 하겠다.
 
-* `update_weights()`: For each particle in the sample set, calculate the probability of the set of observations based on a multi-variate Gaussian distribution.
-* `resample()`: Reconstruct the set of particles that capture the posterior belief distribution by drawing samples according to the weights.
+![image-20210416105310169](C:\Users\mh9716\AppData\Roaming\Typora\typora-user-images\image-20210416105310169.png)
 
-To run the program (which generates a 2D plot), execute the following command:
 
-```
-$ python run.py
-```
 
-Without any modification to the code, you will see a resulting plot like the one below:
 
-![Particle Filter without Proper Update & Resample][empty-update]
 
-while a reasonable implementation of the above mentioned methods (assignments) will give you something like
+다음으로는 sampling을 하는 부분이다. sampling을 하는 부분은 numpy의 random.choice를 사용하면 쉽게 구할 수 있다.
 
-![Particle Filter Example][example]
-
-Carefully read comments in the two method bodies and write Python code that does the job.
+![image](https://user-images.githubusercontent.com/12128784/114960351-ccedec80-9ea1-11eb-9e04-90aa4e0b1c51.png)
