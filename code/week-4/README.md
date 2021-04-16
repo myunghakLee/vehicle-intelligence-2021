@@ -6,8 +6,7 @@
 
 우선 update부분을 살표보도록 하겠다.
 
-![image-20210416105310169](C:\Users\mh9716\AppData\Roaming\Typora\typora-user-images\image-20210416105310169.png)
-
+![image](https://user-images.githubusercontent.com/12128784/115054049-bf287d80-9f1a-11eb-9e38-84f8a4c64f40.png)
 
 
 
