@@ -47,6 +47,18 @@ cost = (2, 1, 20)   # Cost for each action (right, straight, left)
 #  [' ', ' ', ' ', '#', ' ', ' ']]
 
 def optimum_policy_2D(grid, init, goal, cost):
+    """
+    grid:  [[1 1 1 0 0 0]
+            [1 1 1 0 1 0]
+            [0 0 0 0 0 0]
+            [1 1 1 0 1 1]
+            [1 1 1 0 1 1]]
+    init:  (4, 3, 0)
+    goal:  (2, 0)
+    cost:  (2, 1, 20)
+
+    """
+
     # Initialize the value function with (infeasibly) high costs.
     value = np.full((4, ) + grid.shape, 999, dtype=np.int32)
     # Initialize the policy function with negative (unused) values.
@@ -64,23 +76,49 @@ def optimum_policy_2D(grid, init, goal, cost):
             range(grid.shape[1]),
             range(len(forward))
         )
+
         # Compute the value function for each state and
         # update policy function accordingly.
         for y, x, t in p:
             # Mark the final state with a special value that we will
             # use in generating the final path policy.
             if (y, x) == goal and value[(t, y, x)] > 0:
-                # TODO: implement code.
-                pass
-            # Try to use simple arithmetic to capture state transitions.
+                value[(t, y, x)], policy[(t, y, x)] = 0, -999
+                change = True
             elif grid[(y, x)] == 0:
-                # TODO: implement code.
-                pass
-    # Now navigate through the policy table to generate a
-    # sequence of actions to take to follow the optimal path.
-    # TODO: implement code.
+                for i in range(len(action)):
+                    index = (t+action[i])%4
+                    cx = x + forward[index][1]
+                    cy = y + forward[index][0]
 
-    # Return the optimum policy generated above.
+                    if 0<= cx < len(grid[0]) and 0 <= cy <len(grid) and (not grid[cy][cx]):
+                        cv = value[index][cy][cx] + cost[i]
+                        if cv < value[t][y][x]:
+                            value[t][y][x] = cv
+                            policy[t][y][x] = action[i]
+                            change = True
+
+    y, x, o = init
+
+
+    # print(policy)
+
+    policy2D[(y, x)] = policy[(o, y, x)]
+    # print(policy2D)
+
+    while policy[(o, y, x)] != -999:
+        p = policy[(o, y, x)]
+
+        co = (o+p) %4
+        policy2D[y][x] = action_name[p+1]
+
+        x += forward[co][1]
+        y += forward[co][0]
+        o = co
+
+        policy2D[y][x] = policy[o][y][x]
+
+    policy2D[y][x] = "*"
     return policy2D
 
 print(optimum_policy_2D(grid, init, goal, cost))
