@@ -2,6 +2,40 @@
 
 ---
 
+본 과제는 A*algorithm을 통해 경로를 찾아 가는 것이다. 단 이 때 left, right, forward 3가지 방향이 있고 각 방향마다 cost가 존재한다는 것이다.
+
+따라서 현재 위치로 부터 갈 수 있는 방향(왼쪽, 오른쪽, 직진) 에 각 cost에 해당하는 값을 적어준다. 단 이 때 미리 적혀있는 값보다 작은 경우만 값을 바꾸어 준다.
+
+위 과정을 우리는 계속 반복하게 된다.
+
+단 기존의 A* 알고리즘과 다르게 도착점에 도달하였다고 알고리즘을 끝내지 않는다. 알고리즘이 끝나는 조건은 더이상 변하는 값이 없는 경우이다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Original
+
 ## Examples
 
 We have four small working examples for demonstration of basic path planning algorithms:

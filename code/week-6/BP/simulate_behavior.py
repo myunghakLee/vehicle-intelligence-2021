@@ -10,6 +10,7 @@ SPEED_LIMIT = 10
 LANE_SPEEDS = [6, 7, 8, 9]
 # LANE_SPEEDS = [6, 7, 8, 9, 10]
 
+
 # Number of available "cells" which should have traffic
 TRAFFIC_DENSITY = 0.15
 # TRAFFIC_DENSITY = 0.3
@@ -22,12 +23,13 @@ MAX_ACCEL = 2
 GOAL = (300, 0)
 
 # These affect the visualization
-FRAMES_PER_SECOND = 4
+FRAMES_PER_SECOND = 20
 AMOUNT_OF_ROAD_VISIBLE = 40
+
 
 def run_simulation(VISUALIZE=True):
     road = Road(
-        SPEED_LIMIT, TRAFFIC_DENSITY, LANE_SPEEDS, AMOUNT_OF_ROAD_VISIBLE
+        SPEED_LIMIT, TRAFFIC_DENSITY, LANE_SPEEDS, AMOUNT_OF_ROAD_VISIBLE, LANE_SPEEDS
     )
     road.populate_traffic()
     ego_config = {

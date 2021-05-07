@@ -6,7 +6,7 @@ class Road(object):
     ego_key = -1
 
     def __init__(self, speed_limit, traffic_density,
-                 lane_speeds, visible_length):
+                 lane_speeds, visible_length, LANE_SPEEDS):
         self.visible_length = visible_length
         self.num_lanes = len(lane_speeds)
         self.lane_speeds = lane_speeds
@@ -18,6 +18,8 @@ class Road(object):
         self.goal_lane = None
         self.goal_s = None
         self.timestep = 0
+        self.LANE_SPEEDS = LANE_SPEEDS
+
 
     def get_ego(self):
         return self.vehicles[self.ego_key]
@@ -47,7 +49,7 @@ class Road(object):
         # update kinematics/state for all vehicles.
         for v_id, v in self.vehicles.items():
             if v_id == self.ego_key:
-                trajectory = v.choose_next_state(predictions)
+                trajectory = v.choose_next_state(predictions, self.LANE_SPEEDS)
                 v.realize_next_state(trajectory)
             else:
                 v.increment()

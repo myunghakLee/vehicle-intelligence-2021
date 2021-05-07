@@ -20,28 +20,51 @@ computed by get_helper_data function.
 '''
 
 # weights for costs
-REACH_GOAL = 0
-EFFICIENCY = 0
+REACH_GOAL = 5
+EFFICIENCY = 3
 
 DEBUG = False
 
-def goal_distance_cost(vehicle, trajectory, predictions, data):
+def goal_distance_cost(vehicle, trajectory, predictions, data, LANE_SPEEDS):
     '''
     Cost increases based on distance of intended lane (for planning a
     lane change) and final lane of a trajectory.
     Cost of being out of goal lane also becomes larger as vehicle approaches
     the goal distance.
     '''
-    return 0
+    # print(sb.LANE_SPEEDS)
 
-def inefficiency_cost(vehicle, trajectory, predictions, data):
+    intended_lane, final_lane, distance_to_goal = data
+    target_line = (intended_lane + final_lane) / 2
+
+    num_lane_to_goal = target_line - vehicle.goal_lane
+    return num_lane_to_goal / ((distance_to_goal/10)**2)
+
+
+def inefficiency_cost(vehicle, trajectory, predictions, data, LANE_SPEEDS):
     '''
     Cost becomes higher for trajectories with intended lane and final lane
     that have slower traffic.
     '''
-    return 0
+    # intended_lane, final_lane, distance_to_goal = data
+    intended_lane, final_lane, _ = data
 
-def calculate_cost(vehicle, trajectory, predictions):
+    v = LANE_SPEEDS[final_lane]
+
+    limit_speed = vehicle.target_speed
+    target_speed = limit_speed - 1
+
+    if v > limit_speed :
+        return 1
+
+    elif v == target_speed :
+        return 0
+
+    return (abs(target_speed - v) / target_speed)
+
+
+
+def calculate_cost(vehicle, trajectory, predictions, LANE_SPEEDS):
     '''
     Sum weighted cost functions to get total cost for trajectory.
     '''
@@ -53,7 +76,7 @@ def calculate_cost(vehicle, trajectory, predictions):
 
     for weight, cf in zip(weight_list, cf_list):
         new_cost = weight \
-                   * cf(vehicle, trajectory, predictions, trajectory_data)
+                   * cf(vehicle, trajectory, predictions, trajectory_data,LANE_SPEEDS)
         if DEBUG:
             print(
                 "%s has cost %.1f for lane %d" % \

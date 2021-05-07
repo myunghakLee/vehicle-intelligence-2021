@@ -1,6 +1,50 @@
 # Week 6 - Prediction & Behaviour Planning
 
----
+## BP(Behavior Planning)
+
+여기서 우리가 해야할 일은 cost function을 작성하는 부분과 vehicle파일 안의 cost function을 통해 계산된 cost를 이용해 최적의 행동을 선택하는 함수입니다. 
+
+이 때 저는 cost function을 다음과 같이 짰습니다. 우선 처음에는 goal_distnace_cost를 낮추고 그 뒤에는 점점 높아지게 하기 위하여 num_lane_to_goal에서 distance_to_goal을 나누어 주었고 이 효과를 좀더 극대화 하기 위하여 distance_to_goal을 제곱해 주었으며 이 때 distance_to_goal이 너무 커지지 않게 하기 위하여 10을 나눔으로 인하여 normalize하였습니다.
+
+![image](https://user-images.githubusercontent.com/12128784/117484934-b3245e80-afa2-11eb-82fc-147e75896efd.png)
+
+
+
+
+
+
+
+
+
+또한 inefficiency_cost에도 도착점까지의 거리를 변수로 넣어줄까도 생각하였지만 이는 이미 goal_distance_cost함수에 들어가 있고 이것으로 충분하다고 생각하다여 생략하였습니다.
+
+그대신 단순히 최대 속도에서의 차이를 최대 속도로 normalize한 값만큼을 cost로 사용하였습니다.
+
+![image](https://user-images.githubusercontent.com/12128784/117485394-478ec100-afa3-11eb-9b19-614c1b196128.png)
+
+
+
+
+
+## GNB(Gaussian Naive Bayes)
+
+여기서는 trian data(action data: left, keep, right)의 평균과 분산을 구합니다.
+
+![image](https://user-images.githubusercontent.com/12128784/117486187-4ad67c80-afa4-11eb-8c3e-aa3b68e620af.png)
+
+
+
+그 후 test에서는 train data를 가지고 구한 평균과 분산을 가지고 각 action에 대한 확률을 구하고 이 중 가장 높은 값을 갖는 action을 선택합니다. 
+
+
+
+![image](https://user-images.githubusercontent.com/12128784/117486249-5d50b600-afa4-11eb-8c5c-500a418257bb.png)
+
+단 이 때 만약 각 행동마다 확률이 다르다면(즉 왼쪽으로 갈 확률과 오른쪽으로 갈 확률이 다르다면) 이 값에 맞추어 p를 normalize해야하지만 본 과제는 모두 같다는 것을 가정하였으므로 무시하였습니다.
+
+
+
+# origianl
 
 ## Assignment #1
 
