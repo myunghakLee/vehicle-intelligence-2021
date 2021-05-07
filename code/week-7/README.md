@@ -8,7 +8,9 @@
 
 
 
-#### heuristic
+## heuristic
+
+
 
 우선 heuristic함수는 단순히 현재 위치에서 goal까지의 거리를 return해주는 함수입니다.
 
@@ -18,7 +20,7 @@
 
 
 
-#### expand
+## expand
 
 expand함수는 우선 현재 state의 속도와 각도가 주어지고 그 다음 어떠한 행동을 할지가 주어졌을 때 다음 행동을 구하는 역할입니다.
 
@@ -30,13 +32,13 @@ expand함수는 우선 현재 state의 속도와 각도가 주어지고 그 다�
 
 
 
-#### theta_to_stack_num
+## theta_to_stack_num
 
 theta_to_stack_num함수는 주어진 각도를 NUM_THETA_CELL(theta의 cell의 개수)에서 몇번째 index인지를 반환하는 함수입니다.
 
 ![image](https://user-images.githubusercontent.com/12128784/117488322-3a73d100-afa7-11eb-8921-c3da06ce383d.png)
 
-### search
+## search
 
 search함수는 목표지점에까지의 경로를 도출하는 함수입니다(단 이 때 목표지점에 도달할 수 있는 경로를 찾지 못하면 False를 반환)
 
@@ -56,7 +58,7 @@ while문 안에서 serach함수는 현재 state를 기반으로 cost가 가장 �
 
 
 
-### results
+## results
 
 위와 같은 알고리즘을 수행하면 다음과 같은 결과가 나옵니다.
 
